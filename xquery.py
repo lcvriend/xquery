@@ -202,6 +202,11 @@ class Xquery:
         else:
             return df.copy().loc[query]
 
+    def isin_multicol(self, right : pd.DataFrame, cols: list) -> pd.Series:
+        left_index = self._obj.set_index(cols).index
+        right_index = right.set_index(cols).index
+        return left_index.isin(right_index)
+
 
 def compile_query(query: str) -> str:
     wrap = lambda funcs: reduce(lambda f,g: lambda x: g(f(x)), funcs)
