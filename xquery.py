@@ -182,7 +182,9 @@ class Xquery:
                 if store_keys else None
             )
             names = ['xquery', *results[0].index.names] if store_keys else None
-            df = pd.concat(results, keys=keys, names=names).drop_duplicates()
+            df = pd.concat(results, keys=keys, names=names)
+            duplicate_rows = ~df.reset_index().duplicated()
+            df = df.loc[duplicate_rows.values]
             df.xquery._history.extend(history)
         return df
 
